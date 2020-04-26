@@ -19,6 +19,7 @@ public class Animals {
 		this.price = price;
 	}
 
+	// Default getters and setters
 	public String getAnimalType() {
 		return animalType;
 	}
@@ -42,10 +43,5 @@ public class Animals {
 	public void setPrice(Float price) {
 		this.price = price;
 	}
-
-	// getters and setters
-	
-
-	
 
 }
