@@ -1,56 +1,51 @@
 package ie.cct.farmca2019430;
 
 public class Animals {
-	
+
 	private String animalType;
-	private String weight;
-	private String price;
-	
-	
-	
-	
-	// generated constructors
-		public Animals(String animalType, String weight, String price) {
-		super();
+	private Float weight;
+	private Float price;
+
+	// Constructor
+	public Animals() {
+
+	}
+
+	// Default generated constructors
+	public Animals(String animalType, Float weight, Float price) {
+
 		this.animalType = animalType;
-		this.weight = weight ;
+		this.weight = weight;
 		this.price = price;
 	}
-	
 
-	//getters and setters 
 	public String getAnimalType() {
 		return animalType;
 	}
-	
+
 	public void setAnimalType(String animalType) {
 		this.animalType = animalType;
 	}
-	
-	public String isWeight() {
+
+	public Float getWeight() {
 		return weight;
 	}
-	
-	public void setWeight(String weight) {
+
+	public void setWeight(Float weight) {
 		this.weight = weight;
 	}
-	
-	public String isPrice() {
+
+	public Float getPrice() {
 		return price;
 	}
-	
-	public void setPrice(String price) {
+
+	public void setPrice(Float price) {
 		this.price = price;
 	}
-	
-	public String getAnimalDetails() {
-		return weight + " " +price;
-	}
+
+	// getters and setters
 	
 
 	
-	
-	
+
 }
-
-
