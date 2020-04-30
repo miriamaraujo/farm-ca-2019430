@@ -2,9 +2,13 @@ package ie.cct.farmca2019430;
 
 public class User {
 	private String name;
+	
+	public User() {
+		super();
+	}
+	
 
 	public User(String name) {
-		super();
 		this.name = name;
 	}
 

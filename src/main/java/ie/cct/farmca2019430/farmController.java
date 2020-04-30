@@ -44,11 +44,15 @@ public class farmController {
 //	Adding User
 //	Same process as in animals but it helps me to practice what I have done.
 //	POST http://localhost:8080/add-user
-//	It returns "status": 400 on postman.
+//	It returns "status": 400 on postman. (Error fixed adding an empty constructor to the User class)
+//	Added the following code into the body on postman:
+//	{
+//	"name": "Jose"
+//	}
 	@PostMapping("add-user")
 	public String addUser(@RequestBody User user) {
 		users.add(user);
-		return user.getName() + " Welcome ";
+		return user.getName() ;
 	}
 
 //	http://localhost:8080/add-animal-success
@@ -91,6 +95,14 @@ public class farmController {
 		price = price / animal.size();
 		return price;
 
+	}
+	
+	
+//	
+//	http://localhost:8080/basket
+	@PostMapping("basket")
+	public String basket (User user, Animals animals) {
+		return user.getName() + " " + animals.getAnimalType();
 	}
 
 //	Multiple parameters:
