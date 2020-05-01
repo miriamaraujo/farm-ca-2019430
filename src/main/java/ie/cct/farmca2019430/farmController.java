@@ -52,7 +52,7 @@ public class farmController {
 	@PostMapping("add-user")
 	public String addUser(@RequestBody User user) {
 		users.add(user);
-		return user.getName() ;
+		return user.getName();
 	}
 
 //	http://localhost:8080/add-animal-success
@@ -65,19 +65,6 @@ public class farmController {
 //		animal.add(animals);
 //		return new SuccessResponse(
 //				animals.getAnimalType() + " added! Weight: " + animals.getWeight() + " Price " + animals.getPrice());
-//	}
-
-//	The result is "NaN" on the browser
-//	@GetMapping("average-price")
-//	public Float averagePrice() {
-//		Float price = 0.0f;
-//		for (Animals animals : animal) {
-//			price += animals.getPrice();
-//		}
-//
-//		price = price / animal.size();
-//		return price;
-//
 //	}
 
 //	The result is "NaN" on the browser
@@ -96,12 +83,26 @@ public class farmController {
 		return price;
 
 	}
-	
-	
-//	
+
+//	same process from average price
+	@GetMapping("average-weight")
+	public Float averageWeight() {
+		if (animal.size() == 0) {
+			throw new NotFoundException("Sorry, to get the average try adding some animals in.");
+		}
+		Float weight = 0.0f;
+		for (Animals animals : animal) {
+			weight += animals.getWeight();
+		}
+
+		weight = weight / animal.size();
+		return weight;
+
+	}
+
 //	http://localhost:8080/basket
 	@PostMapping("basket")
-	public String basket (User user, Animals animals) {
+	public String basket(User user, Animals animals) {
 		return user.getName() + " " + animals.getAnimalType();
 	}
 
@@ -122,5 +123,51 @@ public class farmController {
 	public void emptyContent() {
 
 	}
+
+//	http://localhost:8080/scale
+//	@GetMapping("scale")
+//	public String scale() {
+//		String weight = "";
+//		for (Animals animals : animal) {
+//		
+//		}
+//		return weight;
+//	}
+
+//	Get the total weight of all the animals.
+//	@GetMapping("weight-total")
+//	public Float weightTotal() {
+//		Float weight = 0f;
+//		for(Float i=0f; i<animal.size(); i++){
+//	        weight += i;
+//	      }
+//		return weight;
+//	It does not return total value.
+//	}
+
+//	Here I found the right way to get the total weight which I was trying to retrieve in the previous function.
+//	http://localhost:8080/weight-total
+	@GetMapping("weight-total")
+	public Float weightTotal(Object Cow) {
+		Float weight = 0f;
+		for (Animals animals : animal) {
+			weight += animals.getWeight();
+		}
+
+		return weight;
+	}
+	
+//	http://localhost:8080/price-total
+	@GetMapping("price-total")
+	public Float priceTotal() {
+		Float price = 0f;
+		for (Animals animals : animal) {
+			price += animals.getPrice();
+		}
+
+		return price;
+	}
+	
+	
 
 }
