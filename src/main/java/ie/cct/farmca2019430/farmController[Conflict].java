@@ -171,25 +171,18 @@ public class farmController {
 
 //	How many animals of each type can be sold (weight requirements above) right now
 
-	@GetMapping("weight-control")
-	public String weightControl() {
+	@GetMapping("cow")
+	public String heyCow() {
 		
 
 		for (Animals animals : animal) {
-			if (animals.getAnimalType().equals("Cow") && animals.getWeight() > 299f) {
-				 animals.getAnimalType();
-			}
-			
-			else if (animals.getAnimalType().equals("Pig") && animals.getWeight() > 99f) {
-				 animals.getAnimalType();
-			}
-			
-			else if (animals.getAnimalType().equals("Chicken") && animals.getWeight() > 0.5f) {
-				 animals.getAnimalType();
+			if (animals.getAnimalType().equals("Cow") && animals.getWeight() > 3090f) {
+				
+				return animals.getAnimalType() + " Can be sold";
 			}
 		}
 
-		return "Animal bellow necessary weight" ;
+		return "Animal bellow the necessary weight" ;
 	}
 
 }

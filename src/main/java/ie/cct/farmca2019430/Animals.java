@@ -18,6 +18,10 @@ public class Animals {
 		this.weight = weight;
 		this.price = price;
 	}
+	
+	enum anymalType{
+		Cow, Chicken, Pig
+	}
 
 	// Default getters and setters
 	public String getAnimalType() {
