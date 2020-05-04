@@ -173,23 +173,37 @@ public class farmController {
 
 	@GetMapping("weight-control")
 	public String weightControl() {
-		
+		String a = "Cow";
+		String b = "Pig";
+		String c = "Chicken";
 
 		for (Animals animals : animal) {
-			if (animals.getAnimalType().equals("Cow") && animals.getWeight() > 299f) {
-				 animals.getAnimalType();
+			if (animals.getAnimalType().equals(a) && animals.getWeight() > 299f) {
+				return animals.getAnimalType() + " Can be sold";
+
 			}
-			
-			else if (animals.getAnimalType().equals("Pig") && animals.getWeight() > 99f) {
-				 animals.getAnimalType();
+
+			else if (animals.getAnimalType().equals(b) && animals.getWeight() > 99f) {
+				return animals.getAnimalType() + " Can be sold";
 			}
-			
-			else if (animals.getAnimalType().equals("Chicken") && animals.getWeight() > 0.5f) {
-				 animals.getAnimalType();
+
+			else if (animals.getAnimalType().equals(c) && animals.getWeight() > 0.5f) {
+				return animals.getAnimalType() + " Can be sold";
 			}
 		}
 
-		return "Animal bellow necessary weight" ;
+		return "Animal bellow necessary weight";
+	}
+
+	@GetMapping("test")
+	public String test() {
+
+		for (Animals animals : animal) {
+
+			 animals.getAnimalType();
+
+		}
+		return null;
 	}
 
 }
