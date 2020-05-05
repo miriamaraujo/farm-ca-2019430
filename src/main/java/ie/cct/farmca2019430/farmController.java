@@ -170,7 +170,8 @@ public class farmController {
 	}
 
 //	How many animals of each type can be sold (weight requirements above) right now
-
+//	I am trying to create a loop that checks the weight of the all the animals but it only returns the first one added to the array and stops.
+//	http://localhost:8080/weight-control
 	@GetMapping("weight-control")
 	public String weightControl() {
 		String a = "Cow";
@@ -195,15 +196,5 @@ public class farmController {
 		return "Animal bellow necessary weight";
 	}
 
-	@GetMapping("test")
-	public String test() {
-
-		for (Animals animals : animal) {
-
-			 animals.getAnimalType();
-
-		}
-		return null;
-	}
-
+	
 }
