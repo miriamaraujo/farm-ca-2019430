@@ -68,7 +68,6 @@ public class farmController {
 //				animals.getAnimalType() + " added! Weight: " + animals.getWeight() + " Price " + animals.getPrice());
 //	}
 
-//	The result is "NaN" on the browser
 //	But once I add animals into the server through Postman it returns the average.
 	@GetMapping("average-price")
 	public Float averagePrice() {
@@ -101,12 +100,6 @@ public class farmController {
 
 	}
 
-//	http://localhost:8080/basket
-	@PostMapping("basket")
-	public String basket(User user, Animals animals) {
-		return user.getName() + " " + animals.getAnimalType();
-	}
-
 //	Multiple parameters:
 //	http://localhost:8080/confirmation?name=Miriam&animalType=Cow
 	@GetMapping("confirmation")
@@ -125,31 +118,14 @@ public class farmController {
 
 	}
 
-//	http://localhost:8080/scale
-//	@GetMapping("scale")
-//	public String scale() {
-//		String weight = "";
-//		for (Animals animals : animal) {
-//		
-//		}
-//		return weight;
-//	}
-
-//	Get the total weight of all the animals.
-//	@GetMapping("weight-total")
-//	public Float weightTotal() {
-//		Float weight = 0f;
-//		for(Float i=0f; i<animal.size(); i++){
-//	        weight += i;
-//	      }
-//		return weight;
-//	It does not return total value.
-//	}
-
 //	Here I found the right way to get the total weight which I was trying to retrieve in the previous function.
 //	http://localhost:8080/weight-total
 	@GetMapping("weight-total")
+
 	public Float weightTotal() {
+		if (animal.size() == 0) {
+			throw new NotFoundException("Sorry, try adding some animals in.");
+		}
 		Float weight = 0f;
 		for (Animals animals : animal) {
 			weight += animals.getWeight();
@@ -160,41 +136,56 @@ public class farmController {
 
 //	http://localhost:8080/price-total
 	@GetMapping("price-total")
+
 	public Float priceTotal() {
+		if (animal.size() == 0) {
+			throw new NotFoundException("Sorry, try adding some animals in.");
+		}
 		Float price = 0f;
 		for (Animals animals : animal) {
 			price += animals.getPrice();
 		}
 
 		return price;
+		// handle when no price is added
 	}
 
-//	How many animals of each type can be sold (weight requirements above) right now
-//	I am trying to create a loop that checks the weight of the all the animals but it only returns the first one added to the array and stops.
+//	returning all the Animals in JSON
+	@GetMapping("all-animals")
+	public List<Animals> getAllAnimals() {
+		return animal;
+	}
+
 //	http://localhost:8080/weight-control
+//	It return the JSON list of animals that can be sold according to their weight
+//	I used the code from the class and made a few changes
 	@GetMapping("weight-control")
-	public String weightControl() {
-		String a = "Cow";
-		String b = "Pig";
-		String c = "Chicken";
+
+	public List<Animals> animalsAboveWeight() {
+
+		List<Animals> aboveWeight = new ArrayList<Animals>();
 
 		for (Animals animals : animal) {
-			if (animals.getAnimalType().equals(a) && animals.getWeight() > 299f) {
-				return animals.getAnimalType() + " Can be sold";
-
+			if (animals.getAnimalType().equals("Cow") && animals.getWeight().compareTo(299.0f) > 0) {
+				aboveWeight.add(animals);
+			}
+			if (animals.getAnimalType().equals("Chicken") && animals.getWeight().compareTo(0.4f) > 0) {
+				aboveWeight.add(animals);
 			}
 
-			else if (animals.getAnimalType().equals(b) && animals.getWeight() > 99f) {
-				return animals.getAnimalType() + " Can be sold";
+			if (animals.getAnimalType().equals("Pig") && animals.getWeight().compareTo(99f) > 0) {
+				aboveWeight.add(animals);
 			}
 
-			else if (animals.getAnimalType().equals(c) && animals.getWeight() > 0.5f) {
-				return animals.getAnimalType() + " Can be sold";
-			}
 		}
 
-		return "Animal bellow necessary weight";
+		if (aboveWeight.size() == 0) {
+			throw new NotFoundException("No items found");
+		}
+
+		return aboveWeight;
 	}
 
-	
+
+
 }
