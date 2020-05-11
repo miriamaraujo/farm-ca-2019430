@@ -19,7 +19,7 @@ public class farmController {
 //	HTTP Status: 200 OK
 	@GetMapping("index")
 	public String welcome() {
-		return "Welcome to Miri's Farm! To shop any of our products SIGN-IN with your NAME at http://localhost:8080/add-user (POST) on Postman ";
+		return "Welcome to Miri's Farm!";
 	}
 
 	private ArrayList<Animals> animal;
@@ -68,7 +68,8 @@ public class farmController {
 //				animals.getAnimalType() + " added! Weight: " + animals.getWeight() + " Price " + animals.getPrice());
 //	}
 
-//	But once I add animals into the server through Postman it returns the average.
+
+//	http://localhost:8080/average-price
 	@GetMapping("average-price")
 	public Float averagePrice() {
 		if (animal.size() == 0) {
@@ -85,6 +86,7 @@ public class farmController {
 	}
 
 //	same process from average price
+//	http://localhost:8080/average-weight
 	@GetMapping("average-weight")
 	public Float averageWeight() {
 		if (animal.size() == 0) {
@@ -119,9 +121,8 @@ public class farmController {
 	}
 
 //	Here I found the right way to get the total weight which I was trying to retrieve in the previous function.
-//	http://localhost:8080/weight-total
-	@GetMapping("weight-total")
-
+//	http://localhost:8080/total-weight
+	@GetMapping("total-weight")
 	public Float weightTotal() {
 		if (animal.size() == 0) {
 			throw new NotFoundException("Sorry, try adding some animals in.");
@@ -133,10 +134,11 @@ public class farmController {
 
 		return weight;
 	}
+	
 
-//	http://localhost:8080/price-total
-	@GetMapping("price-total")
-
+//	http://localhost:8080/total-worth
+//	Total worth of the Farm regardless of weight.
+	@GetMapping("total-worth")
 	public Float priceTotal() {
 		if (animal.size() == 0) {
 			throw new NotFoundException("Sorry, try adding some animals in.");
@@ -147,20 +149,20 @@ public class farmController {
 		}
 
 		return price;
-		// handle when no price is added
 	}
 
 //	returning all the Animals in JSON
+//	http://localhost:8080/all-animals
 	@GetMapping("all-animals")
 	public List<Animals> getAllAnimals() {
 		return animal;
 	}
 
 //	http://localhost:8080/weight-control
+//	How many animals of each type can be sold (weight requirements above) right now
 //	It return the JSON list of animals that can be sold according to their weight
 //	I used the code from the class and made a few changes
 	@GetMapping("weight-control")
-
 	public List<Animals> animalsAboveWeight() {
 
 		List<Animals> aboveWeight = new ArrayList<Animals>();
@@ -186,6 +188,32 @@ public class farmController {
 		return aboveWeight;
 	}
 
+//	What is the current value of the full farm stock: That is, the price of all the animals
+//	that can be sold right now.
+//	http://localhost:8080/selling-total
+	@GetMapping("selling-total")
+	public Float canBeSoldTotal() {
+		List<Animals> canBeSold = new ArrayList<Animals>();
+		Float price = 0f;
+		for (Animals animals : animal) {
+			if (animals.getAnimalType().equals("Cow") && animals.getWeight().compareTo(299.0f) > 0) {
+				canBeSold.add(animals);
+				price += animals.getPrice();
+			}
+			if (animals.getAnimalType().equals("Chicken") && animals.getWeight().compareTo(0.4f) > 0) {
+				canBeSold.add(animals);
+				price += animals.getPrice();
+			}
 
+			if (animals.getAnimalType().equals("Pig") && animals.getWeight().compareTo(0.99f) > 0) {
+				canBeSold.add(animals);
+				price += animals.getPrice();
+			}
+
+		}
+
+		return price;
+
+	}
 
 }
