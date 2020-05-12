@@ -19,18 +19,15 @@ public class farmController {
 
 	public farmController() {
 		animal = new ArrayList<Animals>();
-		
-		animal.add(new Animals("Cow", 300f, 10f));
-		animal.add(new Animals("Chicken", 0.5f, 10f));
-		animal.add(new Animals("Pig", 100f, 10f));
-		animal.add(new Animals("Cow", 100f, 250f));
-		animal.add(new Animals("Chicken", 0.2f, 2f));
-		animal.add(new Animals("Pig", 50f, 125f));
-		
+
+//		animal.add(new Animals("Cow", 300f, 10f));
+//		animal.add(new Animals("Chicken", 0.5f, 10f));
+//		animal.add(new Animals("Pig", 100f, 10f));
+//		animal.add(new Animals("Cow", 100f, 250f));
+//		animal.add(new Animals("Chicken", 0.2f, 2f));
+//		animal.add(new Animals("Pig", 50f, 125f));
 
 	}
-	
-	
 
 //	GET http://localhost:8080/greeting
 //	Simple greeting
@@ -49,36 +46,38 @@ public class farmController {
 	}
 
 	/*
-	 * POST http://localhost:8080/add-animal Shows added item in the body with the
-	 * returning statements. Added header Content-Type : Application JSON Added
-	 * animal in JSON syntax on postman >> BODY >> RAW. HTTP Status: 200 OK
+	 * http://localhost:8080/add-animal Here in this one you can Add the three
+	 * Animal Types but if you try to add some other animal you get a Status 400 for
+	 * bad request. Once you add it you get the Success Response
 	 */
 	@PostMapping("add-animal")
-	public String addAnimals(@RequestBody Animals animals) {
-		animal.add(animals);
-		return animals.getAnimalType() + " added! Weight: " + animals.getWeight() + " Price " + animals.getPrice();
-	}
+	public SuccessResponse addAnimals(@RequestBody Animals animals) {
+		if (!animals.getAnimalType().equals("Cow") && !animals.getAnimalType().equals("Pig")
+				&& !animals.getAnimalType().equals("Chicken")) {
+			throw new InvalidRequest("You must stick to the following animals: Cow, Chicken and Pig.");
+		}
 
-	/*
-	 * http://localhost:8080/add-animal-success Displays the message on the body in
-	 * JSON with success. POST http://localhost:8080/add-animal-success HTTP Status:
-	 * 200 OK
-	 */
-	@PostMapping("add-animal-success")
-	public SuccessResponse addAnimalsMessage(@RequestBody Animals animals) {
 		animal.add(animals);
 		return new SuccessResponse(
 				animals.getAnimalType() + " added! Weight: " + animals.getWeight() + " Price " + animals.getPrice());
 	}
 
-//	returning all the Animals in JSON
+//	http://localhost:8080/remove-all
+	@PostMapping("remove-all")
+	public boolean removeAll() {
+		return animal.removeAll(getAllAnimals());
+
+	}
+
+//	Returns all the Animals in JSON
 //	http://localhost:8080/all-animals
 	@GetMapping("all-animals")
 	public List<Animals> getAllAnimals() {
 		return animal;
-				
+
 	}
 
+//	Average of All the Animals
 //	http://localhost:8080/average-weight
 	@GetMapping("average-weight")
 	public Float averageWeight() {
@@ -111,7 +110,7 @@ public class farmController {
 
 	}
 
-//	Here I found the right way to get the total weight which I was trying to retrieve in the previous function.
+//	The total weight of all the animals.
 //	http://localhost:8080/total-weight
 	@GetMapping("total-weight")
 	public Float weightTotal() {
@@ -126,8 +125,8 @@ public class farmController {
 		return weight;
 	}
 
+//	Total worth of the Farm regardless of the weight of the animals.
 //	http://localhost:8080/total-worth
-//	Total worth of the Farm regardless of weight.
 	@GetMapping("total-worth")
 	public Float priceTotal() {
 		if (animal.size() == 0) {
@@ -142,7 +141,6 @@ public class farmController {
 	}
 
 //	http://localhost:8080/weight-control
-//	How many animals of each type can be sold (weight requirements above) right now
 //	It return the JSON list of animals that can be sold according to their weight
 //	I used the code from the class and made a few changes
 	@GetMapping("weight-control")
@@ -167,14 +165,11 @@ public class farmController {
 		if (aboveWeight.size() == 0) {
 			throw new NotFoundException("No items found");
 		}
-		
-		
 
 		return aboveWeight;
 	}
 
-//	What is the current value of the full farm stock: That is, the price of all the animals
-//	that can be sold right now.
+//	The total price of all the animals that can be sold right now.
 //	http://localhost:8080/selling-total
 	@GetMapping("selling-total")
 	public Float canBeSoldTotal() {
@@ -201,12 +196,46 @@ public class farmController {
 
 	}
 
-//	Multiple parameters[ I need to get the sum o
-//	http://localhost:8080/confirmation?name=Miriam&animalType=Cow
-	@GetMapping("confirmation")
-	public String confirmation(@RequestParam(required = true) String name,
-			@RequestParam(required = true) String animalType) {
-		return name + " you have bought a " + animalType + ". Thanks for choosing Miri's Farm!";
+//	Average by AnimalType
+//	http://localhost:8080/average-type
+	@GetMapping("average-type")
+	public Float averageType() {
+
+		List<Animals> averageType = new ArrayList<Animals>();
+
+		Float weight = 0.0f;
+		for (Animals animals : animal) {
+//			if (animals.getAnimalType().equals("Cow")) {
+//				averageType.add(animals);
+//				weight += animals.getWeight();
+//			}
+			
+			if (animals.getAnimalType().equals("Chicken")) {
+				averageType.add(animals);
+				weight += animals.getWeight();
+			}
+
+//			if (animals.getAnimalType().equals("Pig")) {
+//				averageType.add(animals);
+//				weight += animals.getWeight();
+//			}
+
+		}
+		weight = weight / averageType.size();
+		if (averageType.size() == 0) {
+			throw new NotFoundException("Sorry, try adding some animals in.");
+		}
+
+		return weight;
+
+	}
+
+//	Multiple parameters that returns the sum of them 
+//	http://localhost:8080/current-value?cow=350&pig=120&chicken=1
+	@GetMapping("current-value")
+	public String currentValue(@RequestParam(required = true) Float cow, @RequestParam(required = true) Float chicken,
+			@RequestParam(required = true) Float pig) {
+		return ("Total : " + (cow + chicken + pig));
 
 	}
 
